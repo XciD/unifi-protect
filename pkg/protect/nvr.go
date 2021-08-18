@@ -1,12 +1,19 @@
 package protect
 
 import (
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
+)
+
+var (
+	ErrUnauthorized = errors.New("unauthorized")
 )
 
 func init() {
@@ -63,6 +70,34 @@ func (n *NVR) GetLiveFeed(camera string, channel int) *LiveFeed {
 }
 
 func (n *NVR) Call(method string, url string, body io.Reader, out interface{}) error {
+	var fullBody []byte
+	if body != nil {
+		fullBody, err := ioutil.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		body = bytes.NewReader(fullBody)
+	}
+
+	if err := n.httpDo(method, url, body, out); err != nil {
+		if err != ErrUnauthorized {
+			return err
+		}
+
+		// Reconnect and retry
+		if err := n.Authenticate(); err != nil {
+			return err
+		}
+		// Re-create a body reader from the full body
+		if body != nil {
+			body = bytes.NewReader(fullBody)
+		}
+		return n.httpDo(method, url, body, out)
+	}
+	return nil
+}
+
+func (n *NVR) httpDo(method string, url string, body io.Reader, out interface{}) error {
 	request, err := http.NewRequest(method, fmt.Sprintf("https://%s:%d%s", n.host, n.port, url), body)
 	if err != nil {
 		return err
@@ -79,6 +114,10 @@ func (n *NVR) Call(method string, url string, body io.Reader, out interface{}) e
 
 	if err != nil {
 		return err
+	}
+
+	if resp.StatusCode == 401 {
+		return ErrUnauthorized
 	}
 
 	if resp.StatusCode/100 != 2 {

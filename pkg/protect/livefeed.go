@@ -84,6 +84,7 @@ func (l *LiveFeed) PumpData() {
 		if err != nil {
 			// Send an empty message to warn the close
 			l.Events <- []byte{}
+			logrus.Infof("Closing feed %s", l.camera)
 			return
 		}
 
