@@ -118,6 +118,10 @@ func (l *WebsocketEvent) handleReconnect() {
 				log.Warn("Disconnected, reconnecting in 30s")
 				time.Sleep(30 * time.Second)
 
+				if err := l.nvr.Authenticate(); err != nil {
+					return
+				}
+
 				if err := l.connect(); err != nil {
 					log.Warnf("Error during reconnection, retrying (%s)", err.Error())
 					continue
