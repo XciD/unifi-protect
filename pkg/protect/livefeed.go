@@ -104,7 +104,7 @@ func (l *LiveFeed) PumpData() {
 			offsetWithHeader := offset + 4
 			header := message[offset:offsetWithHeader]
 
-			if header[0] > endSegmentFrameType || header[0] < initSegmentFrameType {
+			if header[0] > endSegmentFrameType || header[0] < keyFrameLiveFrameType {
 				logrus.Errorf("Error, invalid header %d", header[0])
 				break
 			}
