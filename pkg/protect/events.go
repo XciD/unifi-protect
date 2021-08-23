@@ -119,7 +119,8 @@ func (l *WebsocketEvent) handleReconnect() {
 				time.Sleep(30 * time.Second)
 
 				if err := l.nvr.Authenticate(); err != nil {
-					return
+					log.Errorf("Error reconnect %s", err)
+					continue
 				}
 
 				if err := l.connect(); err != nil {
