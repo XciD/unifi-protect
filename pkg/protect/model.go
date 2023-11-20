@@ -279,7 +279,7 @@ type Camera struct {
 	IsMicEnabled              bool                 `json:"isMicEnabled"`
 	IsRecording               bool                 `json:"isRecording"`
 	IsMotionDetected          bool                 `json:"isMotionDetected"`
-	PhyRate                   int                  `json:"phyRate"`
+	PhyRate                   float64              `json:"phyRate"`
 	HdrMode                   bool                 `json:"hdrMode"`
 	VideoMode                 string               `json:"videoMode"`
 	IsProbingForWifi          bool                 `json:"isProbingForWifi"`
