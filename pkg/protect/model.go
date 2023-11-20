@@ -238,11 +238,11 @@ type PirSettings struct {
 	TimelapseTransferInterval int `json:"timelapseTransferInterval"`
 }
 type WifiConnectionState struct {
-	Channel        int `json:"channel"`
-	Frequency      int `json:"frequency"`
-	PhyRate        int `json:"phyRate"`
-	SignalQuality  int `json:"signalQuality"`
-	SignalStrength int `json:"signalStrength"`
+	Channel        int     `json:"channel"`
+	Frequency      int     `json:"frequency"`
+	PhyRate        float64 `json:"phyRate"`
+	SignalQuality  int     `json:"signalQuality"`
+	SignalStrength int     `json:"signalStrength"`
 }
 type LcdMessage struct {
 	Type    string `json:"type"`
