@@ -138,3 +138,13 @@ func (n *NVR) GetBootstrap() (*Bootstrap, error) {
 	bootstrap := &Bootstrap{}
 	return bootstrap, n.Call(http.MethodGet, "/proxy/protect/api/bootstrap", nil, bootstrap)
 }
+
+func (n *NVR) EnableNotification(user string) error {
+	r := strings.NewReader(`{"detectionNotifications":{"trigger":{"when":"always"}}}`)
+	return n.Call(http.MethodPatch, fmt.Sprintf("/proxy/protect/api/users/%s/notifications", user), r, nil)
+}
+
+func (n *NVR) DisableNotification(user string) error {
+	r := strings.NewReader(`{"detectionNotifications":{"trigger":{"when":"never"}}}`)
+	return n.Call(http.MethodPatch, fmt.Sprintf("/proxy/protect/api/users/%s/notifications", user), r, nil)
+}

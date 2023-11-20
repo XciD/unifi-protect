@@ -378,9 +378,8 @@ type Memory struct {
 	Total     int `json:"total"`
 }
 type Devices struct {
-	Model   interface{} `json:"model"`
-	Size    interface{} `json:"size"`
-	Healthy bool        `json:"healthy"`
+	Model interface{} `json:"model"`
+	Size  interface{} `json:"size"`
 }
 type Storage struct {
 	Available   int64     `json:"available"`
